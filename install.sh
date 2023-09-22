@@ -20,7 +20,7 @@ fi
 # delete the project directory if it already exists
 if [ -d "$project_directory" ]; then
     echo "Deleting directory: $project_directory"
-    rm -rf "$project_directory"
+    sudo rm -rf "$project_directory"
     echo "Directory deleted."
 else
     echo "Directory does not exist: $project_directory"
