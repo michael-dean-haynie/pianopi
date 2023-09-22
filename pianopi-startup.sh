@@ -1,15 +1,20 @@
 #!/bin/sh
 
+# parameters
+project_directory="$HOME/pianopi"
+#install_script_directory="$HOME"
+
+# apt house-keeping
 sudo apt update -y
 sudo apt upgrade -y
 
+# install dependencies with apt
 sudo apt install -y vim
 sudo apt install -y nodejs
 sudo apt install -y npm
 sudo apt install -y git
 
 # avoid warnings about executing files from git repository
-project_directory="$HOME/pianopi"
 if [ "$(sudo git config --global --get-all safe.directory "$project_directory")"  = "$project_directory" ]; then
   echo "project directory $project_directory already exists in git config safe.directory"
 else
