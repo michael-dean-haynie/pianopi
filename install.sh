@@ -8,8 +8,16 @@ sudo apt install -y nodejs
 sudo apt install -y npm
 sudo apt install -y git
 
-# delete the project directory if it already exists
+# avoid warnings about executing files from git repository
 project_directory="$HOME/pianopi"
+if [ "$(sudo git config --global --get-all safe.directory "$project_directory")"  = "$project_directory" ]; then
+  echo "project directory $project_directory already exists in git config safe.directory"
+else
+  echo "adding project directory $project_directory to git config safe.directory"
+  sudo git config --global --add safe.directory "$project_directory"
+fi
+
+# delete the project directory if it already exists
 if [ -d "$project_directory" ]; then
     echo "Deleting directory: $project_directory"
     rm -rf "$project_directory"
