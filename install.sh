@@ -12,7 +12,7 @@ sudo apt install -y git
 project_directory="$HOME/pianopi"
 if [ -d "$project_directory" ]; then
     echo "Deleting directory: $project_directory"
-    rm -r "$project_directory"
+    rm -rf "$project_directory"
     echo "Directory deleted."
 else
     echo "Directory does not exist: $project_directory"
