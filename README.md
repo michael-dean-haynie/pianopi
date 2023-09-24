@@ -33,7 +33,6 @@ Bus 001 Device 009: ID 09e8:0050 AKAI  Professional M.I. Corp. MPK mini Play mk3
 
 ## Python Attempt
 ```shell
-sudo apt install python3-alsaseq -y
 sudo apt install python3-pip -y
 sudo pip install mido
 chmod +x midi_reader.py # get this from this git repository
