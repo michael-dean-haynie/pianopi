@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import mido
+import websocket
 
 def list_midi_input_ports():
     print("Available MIDI input ports:")
@@ -31,6 +32,7 @@ def main():
             # Start receiving and printing MIDI events
             for message in midi_in:
                 print(f"Received: {message}")
+                ws.send(message)
 
     except KeyboardInterrupt:
         print("\nExiting...")
