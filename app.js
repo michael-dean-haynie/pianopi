@@ -26,5 +26,8 @@ webmidi.enable((err) => {
         webmidi.inputs.forEach((input) => {
             console.log(input.name);
         });
+        if (!webmidi.inputs.length) {
+            console.log("No inputs found.")
+        }
     }
 });

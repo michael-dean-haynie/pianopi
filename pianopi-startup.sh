@@ -5,7 +5,8 @@ project_directory="$HOME/pianopi"
 #install_script_directory="$HOME"
 
 # might be able to get rid of parts of this (enabling midi for user)
-sudo usermod -a -G audio your_username
+sudo usermod -a -G audio michael
+sudo usermod -a -G audio root
 
 # apt house-keeping
 sudo apt update -y
