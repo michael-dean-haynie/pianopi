@@ -37,6 +37,7 @@ sudo git clone https://github.com/michael-dean-haynie/pianopi.git
 
 # install project dependencies
 cd pianopi || exit
+sudo git pull
 sudo npm install
 
 # run project

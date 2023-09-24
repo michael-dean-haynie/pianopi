@@ -1,3 +1,9 @@
+/////////////////////// keep process running
+(function wait () {
+    setTimeout(wait, 1000);
+})();
+/////////////////////////////// end keep process running
+
 const { WebMidi } = require("webmidi")
 
 console.log('Hello from Pianopi!')
@@ -13,5 +19,4 @@ function onEnabled() {
 
     // Outputs
     WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
-
 }
