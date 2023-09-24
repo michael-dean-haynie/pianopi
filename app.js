@@ -8,27 +8,23 @@ const { WebMidi } = require("webmidi")
 
 console.log('Hello from Pianopi!')
 
-// WebMidi
-//     .enable()
-//     .then(onEnabled)
-//     .catch(err => alert(err));
-//
-// function onEnabled() {
-//     // Inputs
-//     WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
-//
-//     // Outputs
-//     WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
-// }
+const { WebMidi: webmidi } = require('webmidi');
 
-WebMidi.addListener('midiaccessgranted', event => {
-    console.log(event.type)
-})
-WebMidi.addListener('connected', event => {
-    console.log(event.type)
-})
-WebMidi.addListener('enabled', event => {
-    console.log(event.type)
-})
+webmidi.enable((err) => {
+    if (err) {
+        console.error('WebMidi could not be enabled:', err);
+    } else {
+        console.log('WebMidi enabled!');
 
-WebMidi.enable();
+        // Register a listener for the "connected" event after enabling
+        webmidi.addListener('connected', (e) => {
+            console.log('MIDI device connected:', e);
+        });
+
+        // List available MIDI inputs
+        console.log('Available inputs:');
+        webmidi.inputs.forEach((input) => {
+            console.log(input.name);
+        });
+    }
+});
