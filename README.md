@@ -35,6 +35,8 @@ Bus 001 Device 009: ID 09e8:0050 AKAI  Professional M.I. Corp. MPK mini Play mk3
 ```shell
 sudo apt install python3-pip -y
 sudo pip install mido
+sudo pip install python-rtmidi
+sudo pip install websocket-client
 chmod +x midi_reader.py # get this from this git repository
 ./midi_reader.py
 ```

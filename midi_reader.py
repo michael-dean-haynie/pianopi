@@ -7,7 +7,15 @@ def list_midi_input_ports():
     for port, _ in enumerate(mido.get_input_names(), 1):
         print(f"{port}: {mido.get_input_names()[port-1]}")
 
+def on_message(wsapp, message):
+    print(message)
+
 def main():
+    # Connect to websocket
+    ws = websocket.WebSocket()
+    ws.connect("wss://inalltwelvekeys.com")
+    ws.send("Hello, from python")
+
     # List available MIDI input ports
     list_midi_input_ports()
 
