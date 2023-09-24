@@ -2,24 +2,25 @@
 
 import mido
 
-def list_midi_devices():
-    print("Available MIDI devices:")
-    for device in mido.get_input_names():
-        print(device)
+def list_midi_input_ports():
+    print("Available MIDI input ports:")
+    for port, _ in enumerate(mido.get_input_names(), 1):
+        print(f"{port}: {mido.get_input_names()[port-1]}")
 
 def main():
-    # List available MIDI devices
-    list_midi_devices()
+    # List available MIDI input ports
+    list_midi_input_ports()
 
-    # Prompt the user to select a MIDI device
-    selected_device = input("Enter the name of the MIDI device you want to use: ")
+    # Prompt the user to select a MIDI input port
+    selected_port_index = int(input("Enter the number of the MIDI input port you want to use: ")) - 1
+    input_ports = mido.get_input_names()
 
     try:
         # Open the selected MIDI input port
-        with mido.open_input(selected_device) as midi_in:
-            print(f"Connected to {selected_device}...")
+        with mido.open_input(input_ports[selected_port_index]) as midi_in:
+            print(f"Connected to {input_ports[selected_port_index]}...")
 
-            # Start receiving and printing MIDI messages
+            # Start receiving and printing MIDI events
             for message in midi_in:
                 print(f"Received: {message}")
 
