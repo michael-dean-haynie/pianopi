@@ -3,7 +3,7 @@ Description=Pianopi Script
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/pianopi-startup.sh
+ExecStart=/usr/local/bin/pianopi-startup.sh ; /usr/local/bin/pianopi.py
 StandardOutput=journal
 StandardError=journal
 WorkingDirectory=/usr/local/bin/
