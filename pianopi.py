@@ -22,6 +22,8 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     print("Opened connection", flush=True)
+    # List available MIDI input ports
+    list_midi_input_ports()
 
 def main():
     print("running the script... with all the flushes", flush=True)
@@ -42,7 +44,6 @@ def main():
     ws.run_forever(dispatcher=rel, reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
     rel.signal(2, rel.abort)  # Keyboard Interrupt
     rel.dispatch()
-    ws.send("Hello, from python")
 #
 #     # List available MIDI input ports
 #     list_midi_input_ports()
