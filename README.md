@@ -12,6 +12,17 @@ sudo systemctl status pianopi.service
 sudo journalctl -f -n 100 -u pianopi.service
 ```
 
+## How to share self-signed certificate with raspberry pi for local development
+```shell
+# from the web server machine (update user@ip if needed)
+scp /Users/michael/certs/ca.crt michael@192.168.0.11:/home/michael/ca.crt
+
+# then ssh into the raspberry pi
+sudo cp /home/michael/ca.crt /usr/local/share/ca-certificates/
+sudo rm /home/michael/ca.crt
+sudo update-ca-certificates
+```
+
 ## Raspberry Pi Installation / (Update in case of startup.sh changes)
 * SSH into the raspberry pi
 ```shell
@@ -20,6 +31,10 @@ sudo apt update -y
 sudo apt upgrade -y
 sudo apt install vim -y
 sudo apt install git -y
+
+# set up local network hosts
+sudo -- sh -c "echo \"192.168.0.3 mbp.local\" >> /etc/hosts"
+sudo -- sh -c "echo \"192.168.0.11 pianopi.local\" >> /etc/hosts"
 
 # pull code from github
 cd ~
