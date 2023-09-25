@@ -6,6 +6,9 @@
 * Go to Wireless - Access Control to see connected devices and their ips
 * `ssh michael@<ip>`
 
+## How to check logs on raspberry pi
+* look at /opt/pianopi.log
+
 ## Raspberry Pi Installation / (Update in case of startup.sh changes)
 * SSH into the raspberry pi
 ```shell
@@ -25,7 +28,7 @@ sudo chmod +x /usr/local/bin/pianopi-startup.sh
 
 # configure startup script to be run when system reboots
 sudo chmod +x pianopi-install.sh
-./pianopi-install.sh
+sudo ./pianopi-install.sh
 ```
 * reboot the raspberry pi `sudo reboot`
 
