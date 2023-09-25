@@ -1,0 +1,11 @@
+[Unit]
+Description=Pianopi Script
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/pianopy.py
+WorkingDirectory=/usr/local/bin/
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

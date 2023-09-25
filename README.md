@@ -15,6 +15,7 @@
 # install minimal dependencies
 sudo apt update -y
 sudo apt upgrade -y
+sudo apt install vim -y
 sudo apt install git -y
 
 # pull code from github
@@ -27,9 +28,11 @@ sudo cp pianopi-startup.sh /usr/local/bin/pianopi-startup.sh
 sudo chmod +x /usr/local/bin/pianopi-startup.sh
 
 # configure startup script to be run when system reboots
-sudo chmod +x pianopi-install.sh
-sudo ./pianopi-install.sh
-```
+sudo cp pianopi.service /etc/systemd/system/pianopi.service
+sudo systemctl daemon-reload
+sudo systemctl enable pianopi.service
+sudo systemctl start pianopi.service
+sudo systemctl status my_script.service```
 * reboot the raspberry pi `sudo reboot`
 
 
