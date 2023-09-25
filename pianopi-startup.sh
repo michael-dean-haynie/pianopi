@@ -18,12 +18,6 @@ sudo apt install python3-pip -y
 #sudo apt install -y nodejs
 #sudo apt install -y npm
 
-# install dependencies form pip
-sudo pip install mido
-sudo pip install python-rtmidi
-sudo pip install websocket-client
-sudo pip install python-dotenv
-
 # avoid warnings about executing files from git repository
 if [ "$(sudo git config --global --get-all safe.directory "$project_directory")"  = "$project_directory" ]; then
   echo "project directory $project_directory already exists in git config safe.directory"
@@ -46,6 +40,9 @@ cd / || exit
 sudo git clone https://github.com/michael-dean-haynie/pianopi.git
 cd pianopi || exit
 sudo git pull
+
+# install dependencies form pip
+sudo pip install -r requirements.txt
 
 # replace script in system directory and make it executable
 sudo rm -rf /usr/local/bin/pianopi.py
