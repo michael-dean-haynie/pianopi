@@ -7,30 +7,30 @@ import os
 import rel
 
 def list_midi_input_ports():
-    print("Available MIDI input ports:")
+    print("Available MIDI input ports:", flush=True)
     for port, _ in enumerate(mido.get_input_names(), 1):
-        print(f"{port}: {mido.get_input_names()[port-1]}")
+        print(f"{port}: {mido.get_input_names()[port-1]}", flush=True)
 
 def on_message(ws, message):
-    print(message)
+    print(message, flush=True)
 
 def on_error(ws, error):
-    print(error)
+    print(error, flush=True)
 
 def on_close(ws, close_status_code, close_msg):
-    print("### closed ###")
+    print("### closed ###", flush=True)
 
 def on_open(ws):
-    print("Opened connection")
+    print("Opened connection", flush=True)
 
 def main():
-    print("running the script... but with more style this time")
+    print("running the script... with all the flushes", flush=True)
 
     # Load environment variables
     env_file_path = "/etc/pianopi/.env"
     load_dotenv(dotenv_path=env_file_path)
     web_socket_url = os.getenv("WEB_SOCKET_URL")
-    print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'")
+    print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'", flush=True)
 
     # Connect to websocket
     websocket.enableTrace(True)
@@ -54,17 +54,17 @@ def main():
 #     try:
 #         # Open the selected MIDI input port
 #         with mido.open_input(input_ports[selected_port_index]) as midi_in:
-#             print(f"Connected to {input_ports[selected_port_index]}...")
+#             print(f"Connected to {input_ports[selected_port_index]}...", flush=True)
 #
 #             # Start receiving and printing MIDI events
 #             for message in midi_in:
-#                 print(f"Received: {message}")
+#                 print(f"Received: {message}", flush=True)
 #                 ws.send(f"Received: {message}")
 #
 #     except KeyboardInterrupt:
-#         print("\nExiting...")
+#         print("\nExiting...", flush=True)
 #     except OSError as e:
-#         print(f"Error: {e}")
+#         print(f"Error: {e}", flush=True)
 
 if __name__ == "__main__":
     main()

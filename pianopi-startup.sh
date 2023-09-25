@@ -50,5 +50,4 @@ sudo cp pianopi.py /usr/local/bin/pianopi.py
 sudo chmod +x /usr/local/bin/pianopi.py
 
 # run script
-# (moved into pianopi.service file)
-#sudo /usr/local/bin/pianopi.py 2>&1
+sudo /usr/local/bin/pianopi.py 2>&1

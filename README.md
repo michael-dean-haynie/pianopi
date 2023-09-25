@@ -40,6 +40,7 @@ sudo -- sh -c "echo \"192.168.0.11 pianopi.local\" >> /etc/hosts"
 sudo -- sh -c "echo \"alias ppstart='sudo systemctl start pianopi.service'\" >> /home/michael/.profile"
 sudo -- sh -c "echo \"alias ppstop='sudo systemctl stop pianopi.service'\" >> /home/michael/.profile"
 sudo -- sh -c "echo \"alias pprestart='sudo systemctl restart pianopi.service'\" >> /home/michael/.profile"
+sudo -- sh -c "echo \"alias ppreload='sudo systemctl daemon-reload'\" >> /home/michael/.profile"
 sudo -- sh -c "echo \"alias ppstatus='sudo systemctl status pianopi.service'\" >> /home/michael/.profile"
 sudo -- sh -c "echo \"alias ppjournal='sudo journalctl -f -n 100 -u pianopi.service'\" >> /home/michael/.profile"
 source /home/michael/.profile
