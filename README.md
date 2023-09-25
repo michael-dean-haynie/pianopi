@@ -9,13 +9,21 @@
 ## Raspberry Pi Installation / (Update in case of startup.sh changes)
 * SSH into the raspberry pi
 ```shell
+# install minimal dependencies
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install git -y
 
+# pull code from github
 cd ~
 sudo git clone https://github.com/michael-dean-haynie/pianopi.git
 cd pianopi
+
+# copy startup script to system directory
+sudo cp pianopi-startup.sh /usr/local/bin/pianopi-startup.sh
+sudo chmod +x /usr/local/bin/pianopi-startup.sh
+
+# configure startup script to be run when system reboots
 sudo chmod +x pianopi-install.sh
 ./pianopi-install.sh
 ```

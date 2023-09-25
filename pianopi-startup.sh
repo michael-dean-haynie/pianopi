@@ -46,6 +46,10 @@ sudo git clone https://github.com/michael-dean-haynie/pianopi.git
 cd pianopi || exit
 sudo git pull
 
-# copy startup script to system directory
-sudo cp pianopi-startup.sh /usr/local/bin/pianopi-startup.sh
-sudo chmod +x /usr/local/bin/pianopi-startup.sh
+# replace script in system directory and make it executable
+sudo rm -rf /usr/local/bin/pianopi.py
+sudo cp pianopy.py /usr/local/bin/pianopi.py
+sudo chmod +x /usr/local/bin/pianopi.py
+
+# run script
+sudo /usr/local/bin/pianopi.py
