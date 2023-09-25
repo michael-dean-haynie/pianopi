@@ -22,6 +22,7 @@ sudo apt install python3-pip -y
 sudo pip install mido
 sudo pip install python-rtmidi
 sudo pip install websocket-client
+sudo pip install python-dotenv
 
 # avoid warnings about executing files from git repository
 if [ "$(sudo git config --global --get-all safe.directory "$project_directory")"  = "$project_directory" ]; then

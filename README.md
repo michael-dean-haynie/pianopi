@@ -30,6 +30,10 @@ cd pianopi
 sudo cp pianopi-startup.sh /usr/local/bin/pianopi-startup.sh
 sudo chmod +x /usr/local/bin/pianopi-startup.sh
 
+# setup environment file for python script
+sudo mkdir -p /etc/pianopi/
+sudo cp .env.example.local /etc/pianopi/.env # then, manually update secrets
+
 # configure startup script to be run when system reboots
 sudo cp pianopi.service /etc/systemd/system/pianopi.service
 sudo systemctl daemon-reload

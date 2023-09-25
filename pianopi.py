@@ -2,6 +2,8 @@
 
 import mido
 import websocket
+from dotenv import load_dotenv
+import os
 
 def list_midi_input_ports():
     print("Available MIDI input ports:")
@@ -13,10 +15,17 @@ def on_message(wsapp, message):
 
 def main():
     print("running the script... but with more style this time")
-#     # Connect to websocket
-#     ws = websocket.WebSocket()
-#     ws.connect("wss://inalltwelvekeys.com")
-#     ws.send("Hello, from python")
+
+    # Load environment variables
+    env_file_path = "/etc/pianopi/.env"
+    load_dotenv(dotenv_path=env_file_path)
+    web_socket_url = os.getenv("WEB_SOCKET_URL")
+    print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'")
+
+    # Connect to websocket
+    wsapp = websocket.WebSocketApp(web_socket_url, on_message=on_message)
+    wsapp.run_forever()
+    wsapp.send("Hello, from python")
 #
 #     # List available MIDI input ports
 #     list_midi_input_ports()
@@ -33,7 +42,7 @@ def main():
 #             # Start receiving and printing MIDI events
 #             for message in midi_in:
 #                 print(f"Received: {message}")
-#                 ws.send(f"Received: {message}")
+#                 wsapp.send(f"Received: {message}")
 #
 #     except KeyboardInterrupt:
 #         print("\nExiting...")
