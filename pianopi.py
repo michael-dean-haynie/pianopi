@@ -4,14 +4,24 @@ import mido
 import websocket
 from dotenv import load_dotenv
 import os
+import rel
 
 def list_midi_input_ports():
     print("Available MIDI input ports:")
     for port, _ in enumerate(mido.get_input_names(), 1):
         print(f"{port}: {mido.get_input_names()[port-1]}")
 
-def on_message(wsapp, message):
+def on_message(ws, message):
     print(message)
+
+def on_error(ws, error):
+    print(error)
+
+def on_close(ws, close_status_code, close_msg):
+    print("### closed ###")
+
+def on_open(ws):
+    print("Opened connection")
 
 def main():
     print("running the script... but with more style this time")
@@ -23,9 +33,15 @@ def main():
     print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'")
 
     # Connect to websocket
-    wsapp = websocket.WebSocketApp(web_socket_url, on_message=on_message)
-    wsapp.run_forever()
-    wsapp.send("Hello, from python")
+    ws = websocket.WebSocketApp(web_socket_url,
+                              on_open=on_open,
+                              on_message=on_message,
+                              on_error=on_error,
+                              on_close=on_close)
+    ws.run_forever(dispatcher=rel, reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
+    rel.signal(2, rel.abort)  # Keyboard Interrupt
+    rel.dispatch()
+    ws.send("Hello, from python")
 #
 #     # List available MIDI input ports
 #     list_midi_input_ports()
@@ -42,7 +58,7 @@ def main():
 #             # Start receiving and printing MIDI events
 #             for message in midi_in:
 #                 print(f"Received: {message}")
-#                 wsapp.send(f"Received: {message}")
+#                 ws.send(f"Received: {message}")
 #
 #     except KeyboardInterrupt:
 #         print("\nExiting...")
