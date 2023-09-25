@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # parameters
-project_directory="$HOME/pianopi"
+project_directory="/pianopi"
 
 # might be able to get rid of parts of this (enabling midi for user)
 #sudo usermod -a -G audio michael
@@ -41,14 +41,14 @@ else
 fi
 
 # clone project git repository
-cd ~ || exit
+cd / || exit
 sudo git clone https://github.com/michael-dean-haynie/pianopi.git
 cd pianopi || exit
 sudo git pull
 
 # replace script in system directory and make it executable
 sudo rm -rf /usr/local/bin/pianopi.py
-sudo cp pianopy.py /usr/local/bin/pianopi.py
+sudo cp pianopi.py /usr/local/bin/pianopi.py
 sudo chmod +x /usr/local/bin/pianopi.py
 
 # run script

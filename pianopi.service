@@ -3,9 +3,11 @@ Description=Pianopi Script
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/pianopy.py
+ExecStart=/usr/local/bin/pianopi-startup.sh
+StandardOutput=journal
+StandardError=journal
 WorkingDirectory=/usr/local/bin/
-Restart=always
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
