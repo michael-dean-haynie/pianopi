@@ -12,7 +12,7 @@ def on_message(wsapp, message):
     print(message)
 
 def main():
-    print("running the script...")
+    print("running the script... but with more style this time")
 #     # Connect to websocket
 #     ws = websocket.WebSocket()
 #     ws.connect("wss://inalltwelvekeys.com")

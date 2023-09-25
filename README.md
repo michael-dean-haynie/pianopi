@@ -7,7 +7,10 @@
 * `ssh michael@<ip>`
 
 ## How to check logs on raspberry pi
-* look at /opt/pianopi.log
+```shell
+sudo systemctl status pianopi.service
+sudo journalctl -f -n 100 -u pianopi.service
+```
 
 ## Raspberry Pi Installation / (Update in case of startup.sh changes)
 * SSH into the raspberry pi
@@ -32,9 +35,6 @@ sudo cp pianopi.service /etc/systemd/system/pianopi.service
 sudo systemctl daemon-reload
 sudo systemctl enable pianopi.service
 sudo systemctl start pianopi.service
-
-sudo systemctl status pianopi.service
-sudo journalctl -f -n 100 -u pianopi.service
 ```
 * reboot the raspberry pi `sudo reboot`
 
