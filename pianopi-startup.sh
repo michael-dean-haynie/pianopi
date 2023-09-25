@@ -50,4 +50,4 @@ sudo cp pianopi.py /usr/local/bin/pianopi.py
 sudo chmod +x /usr/local/bin/pianopi.py
 
 # run script
-sudo /usr/local/bin/pianopi.py
+sudo /usr/local/bin/pianopi.py 2>&1
