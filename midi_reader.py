@@ -32,7 +32,7 @@ def main():
             # Start receiving and printing MIDI events
             for message in midi_in:
                 print(f"Received: {message}")
-                ws.send(message)
+                ws.send(f"Received: {message}")
 
     except KeyboardInterrupt:
         print("\nExiting...")

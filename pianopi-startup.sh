@@ -2,21 +2,26 @@
 
 # parameters
 project_directory="$HOME/pianopi"
-#install_script_directory="$HOME"
 
 # might be able to get rid of parts of this (enabling midi for user)
-sudo usermod -a -G audio michael
-sudo usermod -a -G audio root
+#sudo usermod -a -G audio michael
+#sudo usermod -a -G audio root
 
 # apt house-keeping
 sudo apt update -y
 sudo apt upgrade -y
 
-# install dependencies with apt
+# install dependencies from apt
 sudo apt install -y vim
-sudo apt install -y nodejs
-sudo apt install -y npm
 sudo apt install -y git
+sudo apt install python3-pip -y
+#sudo apt install -y nodejs
+#sudo apt install -y npm
+
+# install dependencies form pip
+sudo pip install mido
+sudo pip install python-rtmidi
+sudo pip install websocket-client
 
 # avoid warnings about executing files from git repository
 if [ "$(sudo git config --global --get-all safe.directory "$project_directory")"  = "$project_directory" ]; then
@@ -38,11 +43,9 @@ fi
 # clone project git repository
 cd ~ || exit
 sudo git clone https://github.com/michael-dean-haynie/pianopi.git
-
-# install project dependencies
 cd pianopi || exit
 sudo git pull
-sudo npm install
 
-# run project
-npm start
+# copy startup script to system directory
+sudo cp pianopi-startup.sh /usr/local/bin/pianopi-startup.sh
+sudo chmod +x /usr/local/bin/pianopi-startup.sh
