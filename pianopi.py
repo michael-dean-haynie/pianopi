@@ -33,7 +33,7 @@ def main():
     print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'")
 
     # Connect to websocket
-#     websocket.enableTrace(True)
+    websocket.enableTrace(True)
     ws = websocket.WebSocketApp(web_socket_url,
                               on_open=on_open,
                               on_message=on_message,
