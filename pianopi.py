@@ -19,7 +19,7 @@ pid_file_path = "/var/pianopi.pid"
 with open(pid_file_path, "w") as pid_file:
     pid_file.write(str(current_pid))
 
-previous_midi_input_names = mido.get_input_names()
+previous_midi_input_names = []
 
 def custom_signal_handler(signum, frame):
     # Your custom logic when the signal is received
@@ -50,6 +50,7 @@ def on_close(ws, close_status_code, close_msg):
 def on_open(ws):
     print("Opened connection", flush=True)
     # List available MIDI input ports
+    previous_midi_input_names = mido.get_input_names()
     list_midi_input_names()
 
     # Register the custom signal handler for a specific signal (e.g., SIGUSR1)
