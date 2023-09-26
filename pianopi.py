@@ -27,7 +27,7 @@ def on_open(ws):
     list_midi_input_ports()
 
     context = pyudev.Context()
-    for device in context.list_devices(subsystem='audio''):
+    for device in context.list_devices(subsystem='audio'):
         print(device, flush=True)
 
 def main():
