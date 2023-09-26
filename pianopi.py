@@ -19,38 +19,22 @@ pid_file_path = "/var/pianopi.pid"
 with open(pid_file_path, "w") as pid_file:
     pid_file.write(str(current_pid))
 
+previous_midi_input_names = mido.get_input_names()
+
 def custom_signal_handler(signum, frame):
     # Your custom logic when the signal is received
     print(f"Received signal {signum}", flush=True)
-    list_midi_input_ports()
+    check_for_midi_input_changes()
 
-# def run_aconnect():
-#     # Define the `aconnect` command you want to run
-#     aconnect_command = ["aconnect", "-i"]
-#
-#     try:
-#         # Run the `aconnect` command
-#         result = subprocess.run(
-#             aconnect_command,
-#             stdout=subprocess.PIPE,
-#             stderr=subprocess.PIPE,
-#             text=True,
-#             check=True,
-#         )
-#
-#         # Print the command's standard output
-#         print("aconnect output:", flush=True)
-#         print(result.stdout, flush=True)
-#
-#     except subprocess.CalledProcessError as e:
-#         # Handle errors, if any
-#         print(f"Error running aconnect: {e}")
+def check_for_midi_input_changes():
+    current_midi_input_names = mido.get_input_names()
+    if (set(current_midi_input_names) != set(previous_midi_input_names):
+        print("Available MIDI input ports have changed:", flush=True)
+        list_midi_input_names()
 
-# Register the custom signal handler for a specific signal (e.g., SIGUSR1)
-signal.signal(signal.SIGUSR1, custom_signal_handler)
+    previous_midi_input_names = current_midi_input_names
 
-def list_midi_input_ports():
-    print("Available MIDI input ports:", flush=True)
+def list_midi_input_names():
     for port, _ in enumerate(mido.get_input_names(), 1):
         print(f"{port}: {mido.get_input_names()[port-1]}", flush=True)
 
@@ -66,7 +50,10 @@ def on_close(ws, close_status_code, close_msg):
 def on_open(ws):
     print("Opened connection", flush=True)
     # List available MIDI input ports
-    list_midi_input_ports()
+    list_midi_input_names()
+
+    # Register the custom signal handler for a specific signal (e.g., SIGUSR1)
+    signal.signal(signal.SIGUSR1, custom_signal_handler)
 
 def main():
     print("running the script... with all the flushes", flush=True)
