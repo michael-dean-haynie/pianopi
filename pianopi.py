@@ -28,7 +28,7 @@ def custom_signal_handler(signum, frame):
 
 def check_for_midi_input_changes():
     current_midi_input_names = mido.get_input_names()
-    if (set(current_midi_input_names) != set(previous_midi_input_names):
+    if (set(current_midi_input_names) != set(previous_midi_input_names)):
         print("Available MIDI input ports have changed:", flush=True)
         list_midi_input_names()
 
