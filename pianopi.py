@@ -18,6 +18,13 @@ pid_file_path = "/var/pianopi.pid"
 with open(pid_file_path, "w") as pid_file:
     pid_file.write(str(current_pid))
 
+def custom_signal_handler(signum, frame):
+    # Your custom logic when the signal is received
+    print(f"Received signal {signum}", flush=True)
+
+# Register the custom signal handler for a specific signal (e.g., SIGUSR1)
+signal.signal(signal.SIGUSR1, custom_signal_handler)
+
 def list_midi_input_ports():
     print("Available MIDI input ports:", flush=True)
     for port, _ in enumerate(mido.get_input_names(), 1):

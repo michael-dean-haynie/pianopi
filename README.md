@@ -54,17 +54,6 @@ cd pianopi
 sudo cp pianopi-startup.sh /usr/local/bin/pianopi-startup.sh
 sudo chmod +x /usr/local/bin/pianopi-startup.sh
 
-# copy usb signal script to system directory
-sudo cp usb-signal.sh /usr/local/bin/usb-signal.sh
-sudo chmod +x /usr/local/bin/usb-signal.sh
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-sudo systemctl restart systemd-udevd
-
-# copy usb device rules for udev event
-sudo cp 99-usb-device.rules /etc/udev/rules.d/99-usb-device.rules
-sudo chmod +x /etc/udev/rules.d/99-usb-device.rules
-
 # setup environment file for python script
 sudo mkdir -p /etc/pianopi/
 sudo cp .env.example.local /etc/pianopi/.env # then, manually update secrets
