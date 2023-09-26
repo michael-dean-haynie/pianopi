@@ -5,6 +5,7 @@ import websocket
 from dotenv import load_dotenv
 import os
 import rel
+import pyudev
 
 def list_midi_input_ports():
     print("Available MIDI input ports:", flush=True)
@@ -24,6 +25,10 @@ def on_open(ws):
     print("Opened connection", flush=True)
     # List available MIDI input ports
     list_midi_input_ports()
+
+    context = pyudev.Context()
+    for device in context.list_devices(subsystem='audio''):
+        print(device, flush=True)
 
 def main():
     print("running the script... with all the flushes", flush=True)
