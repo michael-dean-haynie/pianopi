@@ -4,8 +4,10 @@
 project_directory="/pianopi"
 
 # might be able to get rid of parts of this (enabling midi for user)
-#sudo usermod -a -G audio michael
-#sudo usermod -a -G audio root
+sudo usermod -a -G audio michael
+sudo usermod -a -G audio root
+sudo usermod -a -G plugdev michael
+sudo usermod -a -G plugdev root
 
 # apt house-keeping
 sudo apt update -y

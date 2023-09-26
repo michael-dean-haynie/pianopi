@@ -6,6 +6,17 @@ from dotenv import load_dotenv
 import os
 import rel
 from pyudev import Context, Monitor, MonitorObserver
+import signal
+import sys
+
+# Get the process ID of the current Python script
+current_pid = os.getpid()
+
+pid_file_path = "/var/pianopi.pid"
+
+# Write the PID to the specified file
+with open(pid_file_path, "w") as pid_file:
+    pid_file.write(str(current_pid))
 
 def list_midi_input_ports():
     print("Available MIDI input ports:", flush=True)
