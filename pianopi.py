@@ -5,7 +5,7 @@ import websocket
 from dotenv import load_dotenv
 import os
 import rel
-import pyudev
+from pyudev import Context, Monitor, MonitorObserver
 
 def list_midi_input_ports():
     print("Available MIDI input ports:", flush=True)
@@ -26,10 +26,32 @@ def on_open(ws):
     # List available MIDI input ports
     list_midi_input_ports()
 
-    context = pyudev.Context()
-    print("listing udev audio devices", flush=True)
-    for device in context.list_devices():
-        print(device, flush=True)
+
+    # Create a udev context
+    context = Context()
+
+    # Create a monitor for udev events
+    monitor = Monitor.from_netlink(context)
+    monitor.filter_by(subsystem='snd')
+
+    # Define a callback function to handle MIDI device events
+    def handle_midi_device_event(action, device):
+        if 'MIDI' in device.get('DEVTYPE', ''):
+            print(f"MIDI Device {device.sys_name} was {action}")
+
+            # Add your custom logic to react to the MIDI device event here
+
+    # Create a monitor observer and attach the callback function
+    observer = MonitorObserver(monitor, callback=handle_midi_device_event, name='monitor-observer')
+    observer.daemon = False  # Set daemon to False to keep the script running
+
+    # Start monitoring
+    observer.start()
+
+    try:
+        observer.join()  # Keep the script running
+    except KeyboardInterrupt:
+        observer.stop()
 
 def main():
     print("running the script... with all the flushes", flush=True)
