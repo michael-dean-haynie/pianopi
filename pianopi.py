@@ -8,6 +8,7 @@ import rel
 from pyudev import Context, Monitor, MonitorObserver
 import signal
 import sys
+import subprocess
 
 # Get the process ID of the current Python script
 current_pid = os.getpid()
@@ -21,6 +22,29 @@ with open(pid_file_path, "w") as pid_file:
 def custom_signal_handler(signum, frame):
     # Your custom logic when the signal is received
     print(f"Received signal {signum}", flush=True)
+    run_aconnect()
+
+def run_aconnect():
+    # Define the `aconnect` command you want to run
+    aconnect_command = ["aconnect", "-i"]
+
+    try:
+        # Run the `aconnect` command
+        result = subprocess.run(
+            aconnect_command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True,
+        )
+
+        # Print the command's standard output
+        print("aconnect output:", flush=True)
+        print(result.stdout, flush=True)
+
+    except subprocess.CalledProcessError as e:
+        # Handle errors, if any
+        print(f"Error running aconnect: {e}")
 
 # Register the custom signal handler for a specific signal (e.g., SIGUSR1)
 signal.signal(signal.SIGUSR1, custom_signal_handler)
