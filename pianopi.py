@@ -28,7 +28,7 @@ def on_open(ws):
 
     context = pyudev.Context()
     print("listing udev audio devices", flush=True)
-    for device in context.list_devices(subsystem='audio'):
+    for device in context.list_devices(subsystem='snd'):
         print(device, flush=True)
 
 def main():
