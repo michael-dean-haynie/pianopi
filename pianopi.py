@@ -114,14 +114,14 @@ if __name__ == "__main__":
     print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'", flush=True)
     print(f"USB_EVENT_FILE is configured as '{usb_event_file}'", flush=True)
 
-    # watchdog for detecting midi devices
-    event_handler = MyHandler()
-    observer = Observer()
-    observer.schedule(event_handler, usb_event_file, recursive=True)
-    observer.start()  # non-blocking
-
-    # do initial midi port search/initialization
-    list_midi_input_names()
+    # # watchdog for detecting midi devices
+    # event_handler = MyHandler()
+    # observer = Observer()
+    # observer.schedule(event_handler, usb_event_file, recursive=True)
+    # observer.start()  # non-blocking
+    #
+    # # do initial midi port search/initialization
+    # list_midi_input_names()
 
     # Start up websocket app
     websocket.enableTrace(True)
