@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Redirect stdout to systemd journal
-exec 1> >(logger -s -t "$(basename "$0")")
-exec 2>&1
+sudo exec 1> >(logger -s -t "$(basename "$0")")
+sudo exec 2>&1
 
 file="/var/last-usb-device-event.txt"
 
