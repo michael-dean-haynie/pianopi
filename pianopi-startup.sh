@@ -43,11 +43,14 @@ sudo git clone https://github.com/michael-dean-haynie/pianopi.git
 cd pianopi || exit
 sudo git pull
 
-# copy usb signal script to system directory
-sudo cp usb-signal.sh /usr/local/bin/usb-signal.sh
-sudo chmod +x /usr/local/bin/usb-signal.sh
+# copy usb-device.sh script
+sudo cp usb-device.sh /usr/local/bin/usb-device.sh
+sudo chmod +x /usr/local/bin/usb-device.sh
 
-# copy usb device rules for udev event
+# initial run of usb-device.sh script
+sudo /usr/local/bin/usb-device.sh
+
+# copy udev rules to fire script on usb device added/removed
 sudo cp 99-usb-device.rules /etc/udev/rules.d/99-usb-device.rules
 sudo chmod +x /etc/udev/rules.d/99-usb-device.rules
 sudo udevadm control --reload-rules
