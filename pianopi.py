@@ -8,13 +8,14 @@ import mido
 import os
 import threading
 from dotenv import load_dotenv
+import queue
 
 """ GLOBAL VARIABLES """
-
 
 midi_ports = {}
 midi_ports_lock = threading.Lock()
 
+midi_msg_queue = queue.Queue()
 
 """ MIDI FUNCTIONS """
 
@@ -23,6 +24,7 @@ def listen_to_midi_port(midi_port):
     # with mido.open_input(port_name) as midi_port:
     with midi_port:
         for message in midi_port:
+            midi_msg_queue.put(message)
             print(message, flush=True)
 
 
@@ -50,10 +52,9 @@ def list_midi_input_names():
 
     dead_port_names = [name for name in midi_ports.keys() if name not in input_names]
     for port_name in dead_port_names:
-        print(f"Existing MIDI '{name}' seems to have gone missing ...", flush=True)
+        print(f"Existing MIDI '{port_name}' seems to have gone missing ...", flush=True)
         midi_ports[port_name].close()
         midi_ports.pop(port_name, None)
-
 
     midi_ports_lock.release()
 
@@ -86,6 +87,17 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     print("Opened connection")
+    threading.Thread(target=queue_consumer, args=[midi_msg_queue, ws]).run()
+
+
+""" QUEUE CONSUMER """
+
+
+def queue_consumer(q, web_soc):
+    while True:
+        item = q.get()
+        web_soc.send(f"{item}")
+        q.task_done()
 
 
 if __name__ == "__main__":
@@ -102,8 +114,6 @@ if __name__ == "__main__":
     print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'", flush=True)
     print(f"USB_EVENT_FILE is configured as '{usb_event_file}'", flush=True)
 
-
-
     # watchdog for detecting midi devices
     event_handler = MyHandler()
     observer = Observer()
@@ -113,15 +123,15 @@ if __name__ == "__main__":
     # do initial midi port search/initialization
     list_midi_input_names()
 
-
     # Start up websocket app
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("wss://mbp.local:8080",
+    web_socket = websocket.WebSocketApp("wss://mbp.local:8080",
                                 on_open=on_open,
                                 on_message=on_message,
                                 on_error=on_error,
                                 on_close=on_close)
 
-    ws.run_forever(dispatcher=rel, reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
+    web_socket.run_forever(dispatcher=rel,
+                   reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
     rel.signal(2, rel.abort)  # Keyboard Interrupt
     rel.dispatch()  # blocking
