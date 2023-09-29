@@ -110,6 +110,10 @@ if __name__ == "__main__":
     observer.schedule(event_handler, usb_event_file, recursive=True)
     observer.start()  # non-blocking
 
+    # do initial midi port search/initialization
+    list_midi_input_names()
+
+
     # Start up websocket app
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp("wss://mbp.local:8080",
