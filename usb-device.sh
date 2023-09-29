@@ -11,3 +11,5 @@ else
     echo "touching new file: $file"
     sudo touch $file
 fi
+
+sudo ping mbp.local -c 1

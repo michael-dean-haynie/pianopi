@@ -79,3 +79,6 @@ sudo pip install websocket-client
 chmod +x midi_reader.py # get this from this git repository
 ./midi_reader.py
 ```
+## Temp Debugging Reference
+[Errno 113] No route to host - reconnect
+Sep 29 11:19:07 pianopi pianopi-startup.sh[1222]: Calling custom dispatcher reconnect [8 frames in stack]
