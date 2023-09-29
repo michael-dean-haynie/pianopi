@@ -52,7 +52,6 @@ sudo /usr/local/bin/usb-device.sh
 
 # copy udev rules to fire script on usb device added/removed
 sudo cp 99-usb-device.rules /etc/udev/rules.d/99-usb-device.rules
-sudo chmod +x /etc/udev/rules.d/99-usb-device.rules
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 sudo systemctl restart systemd-udevd

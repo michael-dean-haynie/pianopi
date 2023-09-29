@@ -1,6 +1,9 @@
 #!/bin/sh
 
-# Specify the PID file you want to read
+# Redirect stdout to systemd journal
+exec 1> >(logger -s -t "$(basename "$0")")
+exec 2>&1
+
 file="/var/last-usb-device-event.txt"
 
 # Check if the PID file exists
