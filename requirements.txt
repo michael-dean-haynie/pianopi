@@ -4,3 +4,4 @@ websocket-client==1.6.3
 python-dotenv==1.0.0
 rel==0.4.9
 pyudev==0.24.1
+watchdog==3.0.0

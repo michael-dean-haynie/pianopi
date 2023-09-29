@@ -1,102 +1,123 @@
 #!/usr/bin/env python3
 
-import mido
 import websocket
-from dotenv import load_dotenv
-import os
 import rel
-from pyudev import Context, Monitor, MonitorObserver
-import signal
-import sys
-import subprocess
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+import mido
+import os
+import threading
+from dotenv import load_dotenv
 
-# Get the process ID of the current Python script
-current_pid = os.getpid()
+""" GLOBAL VARIABLES """
 
-pid_file_path = "/var/pianopi.pid"
 
-# Write the PID to the specified file
-with open(pid_file_path, "w") as pid_file:
-    pid_file.write(str(current_pid))
+midi_ports = {}
+midi_ports_lock = threading.Lock()
 
-previous_midi_input_names = []
 
-def custom_signal_handler(signum, frame):
-    # Your custom logic when the signal is received
-    print(f"Received signal {signum}", flush=True)
-    check_for_midi_input_changes()
+""" MIDI FUNCTIONS """
 
-def check_for_midi_input_changes():
-    current_midi_input_names = mido.get_input_names()
-    if (set(current_midi_input_names) != set(previous_midi_input_names)):
-        print("Available MIDI input ports have changed:", flush=True)
-        list_midi_input_names()
 
-    previous_midi_input_names = current_midi_input_names
+def listen_to_midi_port(midi_port):
+    # with mido.open_input(port_name) as midi_port:
+    with midi_port:
+        for message in midi_port:
+            print(message, flush=True)
+
 
 def list_midi_input_names():
-    for port, _ in enumerate(mido.get_input_names(), 1):
-        print(f"{port}: {mido.get_input_names()[port-1]}", flush=True)
+    midi_ports_lock.acquire()
+    print("Listing MIDI Inputs:", flush=True)
+    input_names = mido.get_input_names()
+    for index, name in enumerate(input_names, 1):
+        print(f"{index}: {name}", flush=True)
+
+        if name in midi_ports:
+            print(f"MIDI port '{name}' already exists in midi_ports", flush=True)
+            midi_port = midi_ports[name]
+            print(f"MIDI port '{name}' is closed: {midi_port.closed}", flush=True)
+            if midi_port.closed:
+                print(f"Opening new MIDI port for '{name}'", flush=True)
+                midi_ports[name] = mido.open_input(name)
+                threading.Thread(target=listen_to_midi_port, args=[midi_port]).start()
+        else:
+            print(f"MIDI port '{name}' does not already exists in midi_ports", flush=True)
+            print(f"Opening new MIDI port for '{name}'", flush=True)
+            midi_port = mido.open_input(name)
+            midi_ports[name] = midi_port
+            threading.Thread(target=listen_to_midi_port, args=[midi_port]).start()
+
+    dead_port_names = [name for name in midi_ports.keys() if name not in input_names]
+    for port_name in dead_port_names:
+        print(f"Existing MIDI '{name}' seems to have gone missing ...", flush=True)
+        midi_ports[port_name].close()
+        midi_ports.pop(port_name, None)
+
+
+    midi_ports_lock.release()
+
+
+""" WATCH DOG EVENT HANDLERS"""
+
+
+class MyHandler(FileSystemEventHandler):
+    def on_modified(self, event):
+        if event.is_directory:
+            return
+        print(f'File {event.src_path} has been modified.', flush=True)
+        list_midi_input_names()
+
+
+""" WEB SOCKET EVENT HANDLERS """
+
 
 def on_message(ws, message):
-    print(message, flush=True)
+    print(message)
+
 
 def on_error(ws, error):
-    print(error, flush=True)
+    print(error)
+
 
 def on_close(ws, close_status_code, close_msg):
-    print("### closed ###", flush=True)
+    print("### closed ###")
+
 
 def on_open(ws):
-    print("Opened connection", flush=True)
-    # List available MIDI input ports
-    previous_midi_input_names = mido.get_input_names()
-    list_midi_input_names()
+    print("Opened connection")
 
-    # Register the custom signal handler for a specific signal (e.g., SIGUSR1)
-    signal.signal(signal.SIGUSR1, custom_signal_handler)
-
-def main():
-    print("running the script... with all the flushes", flush=True)
-
-    # Load environment variables
-    env_file_path = "/etc/pianopi/.env"
-    load_dotenv(dotenv_path=env_file_path)
-    web_socket_url = os.getenv("WEB_SOCKET_URL")
-    print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'", flush=True)
-
-    # Connect to websocket
-    websocket.enableTrace(True)
-    ws = websocket.WebSocketApp(web_socket_url,
-                              on_open=on_open,
-                              on_message=on_message,
-                              on_error=on_error,
-                              on_close=on_close)
-    ws.run_forever(dispatcher=rel, reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
-    rel.signal(2, rel.abort)  # Keyboard Interrupt
-    rel.dispatch()
-#
-#     # List available MIDI input ports
-#     list_midi_input_ports()
-#
-#     # Prompt the user to select a MIDI input port
-#     selected_port_index = int(input("Enter the number of the MIDI input port you want to use: ")) - 1
-#     input_ports = mido.get_input_names()
-#
-#     try:
-#         # Open the selected MIDI input port
-#         with mido.open_input(input_ports[selected_port_index]) as midi_in:
-#             print(f"Connected to {input_ports[selected_port_index]}...", flush=True)
-#
-#             # Start receiving and printing MIDI events
-#             for message in midi_in:
-#                 print(f"Received: {message}", flush=True)
-#                 ws.send(f"Received: {message}")
-#
-#     except KeyboardInterrupt:
-#         print("\nExiting...", flush=True)
-#     except OSError as e:
-#         print(f"Error: {e}", flush=True)
 
 if __name__ == "__main__":
-    main()
+    # testing
+    # list_midi_input_names()
+
+    # load environment variables
+    env_file_path = "/etc/pianopi/.env"
+    load_dotenv(dotenv_path=env_file_path)
+
+    web_socket_url = os.getenv("WEB_SOCKET_URL")
+    usb_event_file = os.getenv("USB_EVENT_FILE")
+
+    print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'", flush=True)
+    print(f"USB_EVENT_FILE is configured as '{usb_event_file}'", flush=True)
+
+
+
+    # watchdog for detecting midi devices
+    event_handler = MyHandler()
+    observer = Observer()
+    observer.schedule(event_handler, usb_event_file, recursive=True)
+    observer.start()  # non-blocking
+
+    # Start up websocket app
+    websocket.enableTrace(True)
+    ws = websocket.WebSocketApp("wss://mbp.local:8080",
+                                on_open=on_open,
+                                on_message=on_message,
+                                on_error=on_error,
+                                on_close=on_close)
+
+    ws.run_forever(dispatcher=rel, reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
+    rel.signal(2, rel.abort)  # Keyboard Interrupt
+    rel.dispatch()  # blocking

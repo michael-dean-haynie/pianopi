@@ -1,4 +1,4 @@
-# pianopi
+# pianopi   
 
 ## How to ssh into raspberrypi if ".local" DNS name is not resolving
 * In a browser go to 192.168.0.1
@@ -53,6 +53,16 @@ cd pianopi
 # copy startup script to system directory
 sudo cp pianopi-startup.sh /usr/local/bin/pianopi-startup.sh
 sudo chmod +x /usr/local/bin/pianopi-startup.sh
+
+# copy usb-device.sh script 
+sudo cp usb-device.sh /usr/local/bin/usb-device.sh
+sudo chmod +x /usr/local/bin/usb-device.sh
+
+# copy udev rules to fire script on usb device added/removed
+sudo cp 99-usb-device.rules /etc/udev/rules.d/99-usb-device.rules
+sudo udevadm control --reload-rules
+#sudo service udev restart # if above line isn't working?
+#sudo systemctl restart udev # if above line isn't working?
 
 # setup environment file for python script
 sudo mkdir -p /etc/pianopi/
