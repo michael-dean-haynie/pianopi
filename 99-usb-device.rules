@@ -1,2 +1,2 @@
-ACTION=="add", SUBSYSTEM=="usb", RUN+="/usr/local/bin/usb-signal.sh"
-ACTION=="remove", SUBSYSTEM=="usb", RUN+="/usr/local/bin/usb-signal.sh"
+ACTION=="add", SUBSYSTEM=="usb", RUN+="/usr/local/bin/usb-device.sh"
+ACTION=="remove", SUBSYSTEM=="usb", RUN+="/usr/local/bin/usb-device.sh"
