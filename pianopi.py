@@ -114,24 +114,24 @@ if __name__ == "__main__":
     print(f"WEB_SOCKET_URL is configured as '{web_socket_url}'", flush=True)
     print(f"USB_EVENT_FILE is configured as '{usb_event_file}'", flush=True)
 
-    # # watchdog for detecting midi devices
-    # event_handler = MyHandler()
-    # observer = Observer()
-    # observer.schedule(event_handler, usb_event_file, recursive=True)
-    # observer.start()  # non-blocking
-    #
-    # # do initial midi port search/initialization
-    # list_midi_input_names()
+    # watchdog for detecting midi devices
+    event_handler = MyHandler()
+    observer = Observer()
+    observer.schedule(event_handler, usb_event_file, recursive=True)
+    observer.start()  # non-blocking
+
+    # do initial midi port search/initialization
+    list_midi_input_names()
 
     # Start up websocket app
     websocket.enableTrace(True)
-    web_socket = websocket.WebSocketApp("wss://mbp.local:8080",
-                                on_open=on_open,
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close)
+    web_socket = websocket.WebSocketApp(web_socket_url,
+                                        on_open=on_open,
+                                        on_message=on_message,
+                                        on_error=on_error,
+                                        on_close=on_close)
 
     web_socket.run_forever(dispatcher=rel,
-                   reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
+                           reconnect=5)  # Set dispatcher to automatic reconnection, 5 second reconnect delay if connection closed unexpectedly
     rel.signal(2, rel.abort)  # Keyboard Interrupt
     rel.dispatch()  # blocking
