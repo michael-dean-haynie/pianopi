@@ -26,6 +26,7 @@ def listen_to_midi_port(midi_port):
     with midi_port:
         for message in midi_port:
             midi_json = json.dumps(message.dict())
+            print(midi_json, flush=True)
             midi_msg_queue.put(midi_json)
 
 
