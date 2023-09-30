@@ -15,7 +15,7 @@ sudo journalctl -f -n 100 -u pianopi.service
 ## How to share self-signed certificate with raspberry pi for local development
 ```shell
 # from the web server machine (update user@ip if needed)
-scp /Users/michael/certs/ca.crt michael@192.168.0.11:/home/michael/ca.crt
+scp /Users/michael/certs/ca.crt michael@pianopi.local:/home/michael/ca.crt
 
 # then ssh into the raspberry pi
 sudo cp /home/michael/ca.crt /usr/local/share/ca-certificates/
@@ -64,21 +64,19 @@ sudo systemctl daemon-reload
 sudo systemctl enable pianopi.service
 sudo systemctl start pianopi.service
 ```
+
 * reboot the raspberry pi `sudo reboot`
+* see the section on installing cert authority for local network ssl
+* see the section firewall settings for the mac so pi can connect without having ssh'ed from mpb to pi
+
+## Firewall settings for the mac so pi can connect without having ssh'ed from mpb to pi
+* Mac > System Preferences > Security & Privacy > Firewall Advanced > Add item to list
+  * in finder go to `/usr/local/bin` to select the node application
 
 
 ## Information about the midi device maker/product
 Bus 001 Device 009: ID 09e8:0050 AKAI  Professional M.I. Corp. MPK mini Play mk3    
 
-## Python Attempt
-```shell
-sudo apt install python3-pip -y
-sudo pip install mido
-sudo pip install python-rtmidi
-sudo pip install websocket-client
-chmod +x midi_reader.py # get this from this git repository
-./midi_reader.py
-```
 ## Temp Debugging Reference
 [Errno 113] No route to host - reconnect
 Sep 29 11:19:07 pianopi pianopi-startup.sh[1222]: Calling custom dispatcher reconnect [8 frames in stack]

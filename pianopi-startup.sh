@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # check network
-sudo ping mbp.local -c 1
+#sudo ping mbp.local -c 1
 
 # parameters
 project_directory="/pianopi"

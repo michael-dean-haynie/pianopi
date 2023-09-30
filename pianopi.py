@@ -96,7 +96,7 @@ def on_open(ws):
 def queue_consumer(q, web_soc):
     while True:
         item = q.get()
-        web_soc.send(f"{item}")
+        web_soc.send(f"{item.dict()}")
         q.task_done()
 
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
     list_midi_input_names()
 
     # Start up websocket app
-    websocket.enableTrace(True)
+    # websocket.enableTrace(True)
     web_socket = websocket.WebSocketApp(web_socket_url,
                                         on_open=on_open,
                                         on_message=on_message,
