@@ -9,6 +9,7 @@ import os
 import threading
 from dotenv import load_dotenv
 import queue
+import json
 
 """ GLOBAL VARIABLES """
 
@@ -96,7 +97,7 @@ def on_open(ws):
 def queue_consumer(q, web_soc):
     while True:
         item = q.get()
-        web_soc.send(f"{item.dict()}")
+        web_soc.send(json.dumps(item.dict()))
         q.task_done()
 
 
