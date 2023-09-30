@@ -25,8 +25,8 @@ def listen_to_midi_port(midi_port):
     # with mido.open_input(port_name) as midi_port:
     with midi_port:
         for message in midi_port:
-            midi_msg_queue.put(message)
-            print(message, flush=True)
+            midi_json = json.dumps(message.dict())
+            midi_msg_queue.put(midi_json)
 
 
 def list_midi_input_names():
@@ -97,7 +97,7 @@ def on_open(ws):
 def queue_consumer(q, web_soc):
     while True:
         item = q.get()
-        web_soc.send(json.dumps(item.dict()))
+        web_soc.send(item)
         q.task_done()
 
 
