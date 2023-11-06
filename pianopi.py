@@ -25,14 +25,12 @@ def listen_to_midi_port(midi_port):
     # with mido.open_input(port_name) as midi_port:
     with midi_port:
         for message in midi_port:
-            midi_json = json.dumps(message.dict())
+            midi_dict = message.dict()
+            midi_dict["bytes"] = message.bytes()
+            midi_json = json.dumps(message.midi_dict)
+
             print(midi_json, flush=True)
-
-            midi_bytes_json = json.dumps(message.bytes())
-            print(midi_bytes_json, flush=True)
-
-#             midi_msg_queue.put(midi_json)
-            midi_msg_queue.put(midi_bytes_json)
+            midi_msg_queue.put(midi_json)
 
 
 def list_midi_input_names():
