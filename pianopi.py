@@ -10,6 +10,7 @@ import threading
 from dotenv import load_dotenv
 import queue
 import json
+import time
 
 """ GLOBAL VARIABLES """
 
@@ -25,8 +26,10 @@ def listen_to_midi_port(midi_port):
     # with mido.open_input(port_name) as midi_port:
     with midi_port:
         for message in midi_port:
+            timestamp = int(time.time() * 1000)  # convert float to ms precision like js Date.now()
             midi_dict = message.dict()
             midi_dict["bytes"] = message.bytes()
+            midi_dict["timestamp"] = timestamp
             midi_json = json.dumps(midi_dict)
 
             print(midi_json, flush=True)
